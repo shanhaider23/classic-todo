@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo, fetchTodos, } from "../redux/slices/todoSlice";
-import type { Todo, } from "../types/todo";
+import { fetchTodos, addLocalTodo } from "../redux/slices/todoSlice";
+import type { Todo } from "../types/todo";
 import type { AppDispatch, RootState } from "../redux/store";
 
 export default function AddTodo() {
@@ -9,20 +9,11 @@ export default function AddTodo() {
     const tasks = useSelector((state: RootState) => state.todos.list);
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
-    const [localTodos, setLocalTodos] = useState<Todo[]>([]);
 
-    // Load localStorage todos on mount
+    // Load todos (this will hydrate localStorage + API merged state)
     useEffect(() => {
-        const stored = localStorage.getItem("localTodos");
-        if (stored) setLocalTodos(JSON.parse(stored));
-
         dispatch(fetchTodos());
     }, [dispatch]);
-
-    // Update localStorage whenever localTodos changes
-    useEffect(() => {
-        localStorage.setItem("localTodos", JSON.stringify(localTodos));
-    }, [localTodos]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,17 +22,14 @@ export default function AddTodo() {
         const todoDate = date || new Date().toISOString().split("T")[0];
 
         const newTodo: Todo = {
-            id: Date.now(), // unique id
+            id: Date.now(),
             title,
             date: todoDate,
             status: "todo",
         };
 
-        // Add to local state
-        setLocalTodos([newTodo, ...localTodos]);
-
-        // Dispatch to Redux (optional, for consistent store)
-        dispatch(addTodo(newTodo));
+        // ✅ Add directly to Redux slice (persists to localStorage inside reducer)
+        dispatch(addLocalTodo(newTodo));
 
         setTitle("");
         setDate("");
@@ -49,12 +37,7 @@ export default function AddTodo() {
 
     // Show todos for today
     const today = new Date().toISOString().split("T")[0];
-    const displayTodos = [
-        ...tasks
-            .filter((t) => t.date.split("T")[0] === today)
-            .map((t) => ({ ...t, isLocal: false })),
-        ...localTodos.filter((t) => t.date === today).map((t) => ({ ...t, isLocal: true })),
-    ];
+    const displayTodos = tasks.filter((t) => t.date.split("T")[0] === today);
 
     return (
         <div className="max-w-md mx-auto mt-10">
@@ -93,7 +76,7 @@ export default function AddTodo() {
                         className={`p-2 border rounded-md mb-1 ${t.status === "done" ? "line-through text-gray-500" : ""
                             }`}
                     >
-                        {t.title} {t.isLocal && <span className="text-sm text-gray-400">(local)</span>}
+                        {t.title}
                     </div>
                 ))}
             </div>
