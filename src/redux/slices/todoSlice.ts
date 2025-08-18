@@ -3,7 +3,6 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { Todo, TasksState } from "../../types/todo";
 import * as api from "../../api/todoApi";
 
-// --- Load todos from localStorage ---
 const loadLocalTodos = (): Todo[] => {
     try {
         const stored = localStorage.getItem("localTodos");
@@ -15,12 +14,12 @@ const loadLocalTodos = (): Todo[] => {
     }
 };
 
-// --- Save todos to localStorage ---
+
 const saveLocalTodos = (todos: Todo[]) => {
     localStorage.setItem("localTodos", JSON.stringify(todos));
 };
 
-// --- Async API thunks (still supported) ---
+
 export const fetchTodos = createAsyncThunk<Todo[]>(
     "todos/fetch",
     async () => {
@@ -40,19 +39,19 @@ export const updateTodo = createAsyncThunk<Todo, Todo>(
     async (task) => task
 );
 
-// --- Initial State (hydrate from localStorage) ---
+
 const initialState: TasksState = {
     list: loadLocalTodos(),
     loading: false,
     error: null,
 };
 
-// --- Slice ---
+
 const todoSlice = createSlice({
     name: "todos",
     initialState,
     reducers: {
-        // Local-only todos (persisted to localStorage)
+
         addLocalTodo: (state, action: PayloadAction<Todo>) => {
             state.list.push(action.payload);
             saveLocalTodos(state.list);
@@ -76,7 +75,7 @@ const todoSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchTodos.fulfilled, (state, action: PayloadAction<Todo[]>) => {
-                // Merge API todos + localStorage todos (avoid duplicates by id)
+
                 const local = loadLocalTodos();
                 const merged = [...action.payload];
                 local.forEach((lt) => {
