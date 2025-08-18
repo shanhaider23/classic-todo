@@ -20,10 +20,7 @@ export default function Dashboard() {
         dispatch(updateLocalTodo({ ...task, status: "done" }));
     };
 
-    // Filter tasks for selected date if needed in CalendarBoard
-    const tasksForDate = todos.filter(
-        (t) => t.date.split("T")[0] === selectedDate.toISOString().split("T")[0]
-    );
+
 
     return (
         <div className="p-5">
@@ -31,7 +28,7 @@ export default function Dashboard() {
                 <p>Loading...</p>
             ) : (
                 <CalendarBoard
-                    tasks={tasksForDate}
+                    tasks={todos}
                     selectedDate={selectedDate}
                     onSelectDate={setSelectedDate}
                     onMarkComplete={handleMarkComplete}
