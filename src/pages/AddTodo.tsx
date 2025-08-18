@@ -25,7 +25,7 @@ export default function AddTodo() {
         setDate("");
     };
 
-    // Show only today's todos
+
     const today = new Date().toISOString().split("T")[0];
     const displayTodos = todos.filter((t) => t.date.split("T")[0] === today);
 

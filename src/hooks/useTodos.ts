@@ -8,12 +8,12 @@ export function useTodos() {
     const dispatch = useDispatch<AppDispatch>();
     const { list: todos, loading } = useSelector((state: RootState) => state.todos);
 
-    // Load todos once
+
     useEffect(() => {
         dispatch(fetchTodos());
     }, [dispatch]);
 
-    // Actions
+
     const addTodo = (todo: Todo) => dispatch(addLocalTodo(todo));
     const markComplete = (todo: Todo) => dispatch(updateLocalTodo({ ...todo, status: "done" }));
     const deleteTodo = (id: number) => dispatch(deleteLocalTodo(id));
