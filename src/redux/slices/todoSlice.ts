@@ -7,7 +7,9 @@ import * as api from "../../api/todoApi";
 const loadLocalTodos = (): Todo[] => {
     try {
         const stored = localStorage.getItem("localTodos");
-        return stored ? JSON.parse(stored) : [];
+        return stored
+            ? JSON.parse(stored).map((t: Todo) => ({ ...t, isLocal: true }))
+            : [];
     } catch {
         return [];
     }
@@ -62,6 +64,10 @@ const todoSlice = createSlice({
                 saveLocalTodos(state.list);
             }
         },
+        deleteLocalTodo: (state, action: PayloadAction<number>) => {
+            state.list = state.list.filter((t) => t.id !== action.payload);
+            saveLocalTodos(state.list);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -99,5 +105,5 @@ const todoSlice = createSlice({
     },
 });
 
-export const { addLocalTodo, updateLocalTodo } = todoSlice.actions;
+export const { addLocalTodo, updateLocalTodo, deleteLocalTodo } = todoSlice.actions;
 export default todoSlice.reducer;

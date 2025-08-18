@@ -2,15 +2,21 @@ import type { Todo } from "../types/todo";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { format } from "date-fns";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Trash2 } from "lucide-react";
 
 const localizer = momentLocalizer(moment);
 
+// Extend Todo for calendar-specific usage
+interface CalendarTodo extends Todo {
+    isLocal?: boolean; // flag to know if the todo is from localStorage
+}
+
 interface CalendarBoardProps {
-    tasks: Todo[];
+    tasks: CalendarTodo[];
     selectedDate: Date;
     onSelectDate: (date: Date) => void;
-    onMarkComplete: (task: Todo) => void;
+    onMarkComplete: (task: CalendarTodo) => void;
+    onDeleteLocal: (task: CalendarTodo) => void; // callback for local todos
 }
 
 interface CalendarEvent {
@@ -25,6 +31,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
     selectedDate,
     onSelectDate,
     onMarkComplete,
+    onDeleteLocal,
 }) => {
     const events: CalendarEvent[] = tasks.map((t) => ({
         id: t.id,
@@ -32,6 +39,16 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
         start: new Date(t.date),
         end: new Date(t.date),
     }));
+
+    const handleDelete = (task: CalendarTodo) => {
+
+        console.log("Deleting task:", task);
+        if (task.isLocal) {
+            onDeleteLocal(task);
+        } else {
+            alert("Deleting API todo not implemented yet");
+        }
+    };
 
     return (
         <div className="flex flex-col lg:flex-row gap-5">
@@ -52,9 +69,14 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
                             className="flex items-center justify-between p-3 border rounded-md mb-2"
                         >
                             <span>{task.title}</span>
-                            <button onClick={() => onMarkComplete(task)}>
-                                <CheckCircle className="text-green-600 hover:text-green-800" />
-                            </button>
+                            <div className="flex gap-2">
+                                <button onClick={() => onMarkComplete(task)}>
+                                    <CheckCircle className="text-green-600 hover:text-green-800" />
+                                </button>
+                                <button onClick={() => handleDelete(task)}>
+                                    <Trash2 className="text-red-600 hover:text-red-800" />
+                                </button>
+                            </div>
                         </div>
                     ))}
 
@@ -64,9 +86,14 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
                     .map((task) => (
                         <div
                             key={task.id}
-                            className="p-2 border rounded-md mb-1 line-through text-gray-500"
+                            className="flex items-center justify-between p-2 border rounded-md mb-1 line-through text-gray-500"
                         >
-                            {task.title}
+                            <span>{task.title}</span>
+                            {task.isLocal && (
+                                <button onClick={() => handleDelete(task)}>
+                                    <Trash2 className="text-red-600 hover:text-red-800" />
+                                </button>
+                            )}
                         </div>
                     ))}
             </div>
