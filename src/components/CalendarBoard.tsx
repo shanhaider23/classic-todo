@@ -71,11 +71,20 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
                     ))}
             </div>
 
-            <div className="w-full ">
+            <div className="bg-white rounded-lg shadow-lg p-4 w-full lg:w-2/3">
                 <Calendar
                     localizer={localizer}
-
-
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    style={{ height: 600 }}
+                    onSelectEvent={(event) => console.log(event)}
+                    views={["month", "week", "day"]}
+                    defaultView="month"
+                    toolbar={true}
+                    popup={true}
+                    onNavigate={(date) => onSelectDate(date)}
+                    date={selectedDate}
                 />
             </div>
         </div>

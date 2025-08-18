@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import tasksReducer from "./slices/todoSlice";
+import todoReducer from "./slices/todoSlice";
 
 export const store = configureStore({
-    reducer: { tasks: tasksReducer },
+    reducer: {
+        todos: todoReducer, // ✅ make sure the key is `todos`
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

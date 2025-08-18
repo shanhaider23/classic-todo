@@ -1,1 +1,25 @@
 @import 'tailwindcss';
+@import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+.rbc-calendar {
+	font-family: 'Inter', sans-serif; /* nicer font */
+}
+
+.rbc-today {
+	background-color: #e0f7fa; /* highlight today */
+}
+
+.rbc-event {
+	background-color: #3b82f6; /* Tailwind blue-500 */
+	color: white;
+	border-radius: 0.25rem;
+	padding: 0.25rem 0.5rem;
+}
+
+.rbc-toolbar button {
+	@apply bg-blue-500 text-white px-3 py-1 rounded-md mr-2;
+}
+
+.rbc-toolbar button:hover {
+	@apply bg-blue-600;
+}

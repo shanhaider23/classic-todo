@@ -6,7 +6,7 @@ const API_URL = 'https://jsonplaceholder.typicode.com/todos';
 
 export const fetchTodos = async (): Promise<Todo[]> => {
     try {
-        const res = await axios.get<ApiTodo[]>(API_URL, { params: { _limit: 10 } });
+        const res = await axios.get<ApiTodo[]>(API_URL, { params: { _limit: 5 } });
 
         console.log('Fetched todos:', res.data);
         return res.data.map((t) => ({
