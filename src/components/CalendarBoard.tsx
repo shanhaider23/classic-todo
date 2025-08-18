@@ -6,9 +6,9 @@ import { CheckCircle, Trash2 } from "lucide-react";
 
 const localizer = momentLocalizer(moment);
 
-// Extend Todo for calendar-specific usage
+
 interface CalendarTodo extends Todo {
-    isLocal?: boolean; // flag to know if the todo is from localStorage
+    isLocal?: boolean;
 }
 
 interface CalendarBoardProps {

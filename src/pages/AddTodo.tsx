@@ -1,19 +1,11 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchTodos, addLocalTodo } from "../redux/slices/todoSlice";
+import { useState } from "react";
 import type { Todo } from "../types/todo";
-import type { AppDispatch, RootState } from "../redux/store";
+import { useTodos } from "../hooks/useTodos";
 
 export default function AddTodo() {
-    const dispatch = useDispatch<AppDispatch>();
-    const tasks = useSelector((state: RootState) => state.todos.list);
+    const { todos, addTodo } = useTodos();
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
-
-    // Load todos (this will hydrate localStorage + API merged state)
-    useEffect(() => {
-        dispatch(fetchTodos());
-    }, [dispatch]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,23 +20,22 @@ export default function AddTodo() {
             status: "todo",
         };
 
-        // ✅ Add directly to Redux slice (persists to localStorage inside reducer)
-        dispatch(addLocalTodo(newTodo));
-
+        addTodo(newTodo);
         setTitle("");
         setDate("");
     };
 
-    // Show todos for today
+    // Show only today's todos
     const today = new Date().toISOString().split("T")[0];
-    const displayTodos = tasks.filter((t) => t.date.split("T")[0] === today);
+    const displayTodos = todos.filter((t) => t.date.split("T")[0] === today);
+
 
     return (
         <div className="max-w-md mx-auto mt-10">
             <h1 className="text-2xl font-bold mb-4">Add Todo</h1>
             <form
                 onSubmit={handleSubmit}
-                className="space-y-4 border p-4 bg-white rounded-md border-gray-100 shadow-lg "
+                className="space-y-4 border p-4 bg-white rounded-md border-gray-100 shadow-lg"
             >
                 <input
                     type="text"
