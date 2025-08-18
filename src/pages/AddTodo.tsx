@@ -44,7 +44,7 @@ export default function AddTodo() {
             <h1 className="text-2xl font-bold mb-4">Add Todo</h1>
             <form
                 onSubmit={handleSubmit}
-                className="space-y-4 border p-4 rounded-md shadow-sm bg-white"
+                className="space-y-4 border p-4 bg-white rounded-md border-gray-100 shadow-lg "
             >
                 <input
                     type="text"
@@ -73,7 +73,7 @@ export default function AddTodo() {
                 {displayTodos.map((t) => (
                     <div
                         key={t.id}
-                        className={`p-2 border rounded-md mb-1 ${t.status === "done" ? "line-through text-gray-500" : ""
+                        className={`p-2 border rounded-md mb-1 border-gray-400 shadow-lg ${t.status === "done" ? "line-through text-gray-500" : ""
                             }`}
                     >
                         {t.title}

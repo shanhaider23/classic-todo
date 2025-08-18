@@ -66,7 +66,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
                     .map((task) => (
                         <div
                             key={task.id}
-                            className="flex items-center justify-between p-3 border rounded-md mb-2"
+                            className="flex items-center justify-between p-3 border border-gray-300 mb-2 rounded-lg shadow-lg"
                         >
                             <span>{task.title}</span>
                             <div className="flex gap-2">
@@ -86,7 +86,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
                     .map((task) => (
                         <div
                             key={task.id}
-                            className="flex items-center justify-between p-2 border rounded-md mb-1 line-through text-gray-500"
+                            className="flex items-center justify-between p-2 border rounded-md mb-1 line-through text-gray-500 border-gray-300 shadow-lg"
                         >
                             <span>{task.title}</span>
                             {task.isLocal && (
